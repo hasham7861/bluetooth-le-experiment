@@ -8,17 +8,16 @@ namespace BTConnector
     {
         static void Main(string[] args)
         {
-
+            startDeviceWatcher();
             Console.ReadKey();
         }
-
 
         static void startDeviceWatcher()
         {
             // Query for extra properties you want returned
             string[] requestedProperties = { "System.Devices.Aep.DeviceAddress", "System.Devices.Aep.IsConnected" };
 
-            DeviceWatcher deviceWatcher =
+           DeviceWatcher deviceWatcher =
                         DeviceInformation.CreateWatcher(
                                 BluetoothLEDevice.GetDeviceSelectorFromPairingState(false),
                                 requestedProperties,
