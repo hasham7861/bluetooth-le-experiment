@@ -10,6 +10,11 @@ namespace BTConnector
         {
             startDeviceWatcher();
             Console.ReadKey();
+
+            // TODO: keep track of all the bluetooth devices that are currently available to us
+            // TODO: only keep the bluetooth watcher on for some seconds upon button press
+            // TODO: add command to connect to bluetooth device of choice
+            
         }
 
         static void startDeviceWatcher()
@@ -17,11 +22,11 @@ namespace BTConnector
             // Query for extra properties you want returned
             string[] requestedProperties = { "System.Devices.Aep.DeviceAddress", "System.Devices.Aep.IsConnected" };
 
-           DeviceWatcher deviceWatcher =
-                        DeviceInformation.CreateWatcher(
-                                BluetoothLEDevice.GetDeviceSelectorFromPairingState(false),
-                                requestedProperties,
-                                DeviceInformationKind.AssociationEndpoint);
+            DeviceWatcher deviceWatcher =
+                         DeviceInformation.CreateWatcher(
+                                 BluetoothLEDevice.GetDeviceSelectorFromPairingState(false),
+                                 requestedProperties,
+                                 DeviceInformationKind.AssociationEndpoint);
 
             // Register event handlers before starting the watcher.
             // Added, Updated and Removed are required to get all nearby devices
@@ -46,22 +51,26 @@ namespace BTConnector
 
         private static void DeviceWatcher_EnumerationCompleted(DeviceWatcher sender, object args)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(args);
         }
 
-        private static void DeviceWatcher_Removed(DeviceWatcher sender, DeviceInformationUpdate args)
+        private static void DeviceWatcher_Removed(DeviceWatcher sender, DeviceInformationUpdate device)
         {
-            throw new NotImplementedException();
+            //  Console.WriteLine(device.Id + "removed ====");
         }
 
-        private static void DeviceWatcher_Updated(DeviceWatcher sender, DeviceInformationUpdate args)
+        private static void DeviceWatcher_Updated(DeviceWatcher sender, DeviceInformationUpdate device)
         {
-            throw new NotImplementedException();
+          //   Console.WriteLine(device.Id + "---");
         }
 
-        private static void DeviceWatcher_Added(DeviceWatcher sender, DeviceInformation args)
+        private static void DeviceWatcher_Added(DeviceWatcher sender, DeviceInformation device)
         {
-            Console.WriteLine(args.ToString());
+
+          if(!String.IsNullOrEmpty(device.Name))
+            {
+               Console.WriteLine(device.Id + "---" + device.Name + "-" + device.IsEnabled);
+            }
         }
     }
 }
