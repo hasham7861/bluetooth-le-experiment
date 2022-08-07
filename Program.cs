@@ -19,7 +19,6 @@ namespace BTConnector
             //The main console ui
             while (true)
             {
-                Console.WriteLine("Type l for listening to new devices");
                 Console.WriteLine("Type x for quiting program");
                 Console.WriteLine("Type c for connecting to device");
 
@@ -29,22 +28,22 @@ namespace BTConnector
                 {
                     client.Close();
                     break;
-                } else if (command == 'l')
-                {
-                    scanAndGetAllDevices(client, devices);
-                } else if(command == 'c')
+                } 
+                else if(command == 'c')
                 {
                     scanAndGetAllDevices(client, devices);
                     Console.WriteLine("Type the name of device you want to pair with");
                     string inputedDeviceName = Console.ReadLine();
-                    // TODO: make use of this device name to attemp to pair with the device found in listening or start listening again
 
                     // TODO: fix code for connecting to bluetooth device
-                    //if(devices.TryGetValue(inputedDeviceName, out BluetoothDeviceInfo device))
-                    //{
-                    //    BluetoothEndPoint ep = new BluetoothEndPoint(device.DeviceAddress, serviceClass);
-                    //    client.Connect(ep);
-                    //}
+                    if(devices.TryGetValue(inputedDeviceName, out BluetoothDeviceInfo device))
+                    {
+                       
+                        // This step is just for connecting to headset, and will require you to click on the notification on bottom right to click tap to connect bluetooth device
+                        device.SetServiceState(BluetoothService.Handsfree, false);
+                        BluetoothEndPoint ep = new BluetoothEndPoint(device.DeviceAddress, BluetoothService.Handsfree);
+                        client.BeginConnect(ep, (data) => { Console.WriteLine("connecting..."); },true);
+                    }
 
                 }
             }
@@ -57,7 +56,11 @@ namespace BTConnector
             foreach (var dev in client.DiscoverDevices())
             {
                 Console.WriteLine("hello device:" + "-" + dev.DeviceAddress + "-" + dev.DeviceName);
-                devices.Add(dev.DeviceName, dev);
+                if(devices.TryGetValue(dev.DeviceName, out BluetoothDeviceInfo device) == false)
+                {
+                    devices.Add(dev.DeviceName, dev);
+                }
+               
             }
         }
 
