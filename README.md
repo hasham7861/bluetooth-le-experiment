@@ -12,5 +12,5 @@ The main script is can be found in the root directory in the file Program.cs
 
 ## To run the project
 
-- You have to have run this project on windows and with .Net version 4.7.2, with Visual Studio you need to build the project and run it.
+- You have to have run this project on windows and with .Net version 4.7.2, with Visual Studio you need to build the project, and download all deps and run it.
 - Get your device ready to pair and it should show up in the list
